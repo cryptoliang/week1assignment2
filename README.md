@@ -23,14 +23,15 @@ The multicall contract is deployed [here](https://testnet.cronoscan.com/address/
 Answer: Let's say the temperature's precision is 2 decimals, we can multiple the weather by 100 when we write the weather to contract storage, and divide it by 100 when we read the weather. `uint32` is large enough to save the temperature even after mulitpled by 100, because the number of real temperature usually is not that large.
 
 **Question 2: How to store a negative temperature while keeping the current smart contract interface unchanged?**
+
 Answer: We can mimic the two's complement to store negative value into a `uint32` type.
 
 How to store a number:
 
 -   To store a number `N`, where `0 <= N <= 2^31-1`, we store it as is.
--   To store a number `-N`, where `0 <= N <= 2^31`, we store the value as `2^32-N`.
+-   To store a negative number `-N`, where `0 <= N <= 2^31`, we store the value as `2^32-N`.
 
 How to read a number:
 
 -   If we read a number `N` from contract, and `0 <= N <= 2^31-1`, we keep it as is.
--   If we read a number `N` from contract, and `2^31 <= N <= 2^32-1`, we calculate `N-2^32` to recover the real value.
+-   If we read a number `N` from contract, and `2^31 <= N <= 2^32-1`, we calculate `N-2^32` to recover the negative value.
